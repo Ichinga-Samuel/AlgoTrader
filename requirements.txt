@@ -1,0 +1,9 @@
+aiomql==4.0.11
+MetaTrader5==5.0.50
+numpy==1.26.4
+pandas==2.2.0
+pandas-ta==0.3.14b0
+python-dateutil==2.8.2
+pytz==2024.1
+six==1.16.0
+tzdata==2024.1
