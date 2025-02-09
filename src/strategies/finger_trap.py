@@ -36,6 +36,9 @@ class FingerTrap(Strategy):
         # a dataclass object that maintains the state of the strategy from iteration to iteration
         self.tracker: Tracker = Tracker(snooze=self.ttf.seconds)
 
+        # add the parameters for the exit function to parameters
+        self.parameters["exit_params"] = {"timeframe": TimeFrame.M5, "count": 1344, "ema": 5}
+
     async def initialize(self):
         """Initialize the strategy. Wait till the beginning of the next timeframe before starting the strategy."""
         await self.sleep(secs=self.ttf.seconds)
