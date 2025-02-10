@@ -2,7 +2,6 @@ from logging import getLogger
 
 from aiomql import OrderType, Trader
 
-
 logger = getLogger(__name__)
 
 
@@ -15,7 +14,7 @@ class SimpleTrader(Trader):
             await self.create_order_with_sl(order_type=order_type, sl=sl)
             parameters = parameters or {}
             # get the exit parameters from the parameters dictionary
-            exit_params = self.parameters.pop("exit_params", {})
+            exit_params = parameters.pop("exit_params", {})
             self.order.comment = parameters.get("name", "SimpleTrader")
             osr = await self.send_order()
             if osr.retcode != 10009 or osr is None:

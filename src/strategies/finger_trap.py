@@ -24,7 +24,7 @@ class FingerTrap(Strategy):
     # The default parameters for the strategy. You can override these in the constructor.
     # via the `params` argument as a dictionary.
     # using two weeks of data for the fast and slow ema
-    parameters = {"fast_ema": 8, "slow_ema": 34, "etf": TimeFrame.M5, "ttf": TimeFrame.M5,
+    parameters = {"fast_ema": 8, "slow_ema": 34, "etf": TimeFrame.M1, "ttf": TimeFrame.M2,
                   "entry_ema": 5, "tcc": 1344, "ecc": 4032}
 
     def __init__(self, *, symbol: Symbol, params: dict | None = None, trader: Trader = None, sessions: Sessions = None,

@@ -9,10 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def fx_bot():
-    # symbols = ['EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'USDCAD', 'AUDUSD', 'NZDUSD', 'EURJPY', 'EURGBP', 'EURCHF']
-    symbols = ['Volatility 10 Index', 'Volatility 100 (1s) Index', 'Volatility 25 Index', 'Volatility 25 (1s) Index',
-     'Volatility 75 Index', 'Volatility 10 (1s) Index', 'Volatility 75 (1s) Index', 'Volatility 50 Index',
-     'Volatility 50 (1s) Index']
+    symbols = ['EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'USDCAD', 'AUDUSD', 'NZDUSD', 'EURJPY', 'EURGBP', 'EURCHF']
     syms = [ForexSymbol(name=symbol) for symbol in symbols]
     strategies = [FingerTrap(symbol=symbol) for symbol in syms]
     bot = Bot()  # create a bot instance

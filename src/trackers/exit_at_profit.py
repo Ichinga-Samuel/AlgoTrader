@@ -1,6 +1,5 @@
 import asyncio
 from logging import getLogger
-import random
 from aiomql import Config, Positions
 
 logger = getLogger(__name__)
@@ -19,7 +18,6 @@ async def exit_at_profit(*, interval: float = 10):
         try:
             # at each iteration, get the positions and check if the profit has been reached
             # get the tickets of the positions to be tracked by this tracker
-            print('inside while loop of exit_at_profit', random.random())
             await asyncio.sleep(interval)  # sleep at each iteration
 
             # tickets are dictionary of ticket: profit
@@ -36,9 +34,10 @@ async def exit_at_profit(*, interval: float = 10):
             positions_to_close = [position for position in positions if position.ticket in tickets.keys() and
                                   position.profit > tickets[position.ticket]]
             # close the positions
-            pos.positions = positions_to_close
-            res = await pos.close_all()
-            logger.info("Closed positions: %s", res)
+            if positions_to_close:
+                pos.positions = positions_to_close
+                res = await pos.close_all()
+                logger.info("Closed positions: %s", res)
 
             # update the positions
             positions = await pos.get_positions()

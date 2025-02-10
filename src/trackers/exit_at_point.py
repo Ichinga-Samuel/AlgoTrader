@@ -3,7 +3,6 @@ Exit a position after a certain amount of points has been reached starting from 
 """
 import asyncio
 from logging import getLogger
-import random
 
 from aiomql import Config, Positions, Symbol
 
@@ -16,7 +15,6 @@ async def exit_at_point(*, interval: int = 10):
     one pip is 10 points.
 
     Args:
-        points (int): The amount of points to wait for. defaults to 0.
         interval (int): The interval in seconds to check the positions. defaults to 10.
     """
     config = Config()
@@ -26,7 +24,6 @@ async def exit_at_point(*, interval: int = 10):
         try:
             # at each iteration, get the positions and check if the points have been reached
             # get the tickets of the positions to be tracked by this tracker
-            print('inside while loop of exit_at_point', random.random())
             await asyncio.sleep(interval)  # sleep at each iteration
 
             # tickets are dictionary of ticket: points

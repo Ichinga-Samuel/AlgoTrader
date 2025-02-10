@@ -9,6 +9,7 @@ logger = getLogger(__name__)
 async def finger_trap_exit(*, interval: int = 60):
     config = Config()
     pos = Positions()
+    print('initializing finger_trap_exit')
     while True:
         try:
             await asyncio.sleep(interval)
