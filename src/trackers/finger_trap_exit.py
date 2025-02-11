@@ -3,13 +3,12 @@ from logging import getLogger
 
 from aiomql import Config, Positions, Symbol, TimeFrame, TradePosition, OrderType
 
+from ..data_structs import OpenPosition
+
 logger = getLogger(__name__)
 
 
 async def finger_trap_exit(*, interval: int = 60):
-    config = Config()
-    pos = Positions()
-    print('initializing finger_trap_exit')
     while True:
         try:
             await asyncio.sleep(interval)
@@ -29,9 +28,12 @@ async def finger_trap_exit(*, interval: int = 60):
             logger.error("Error: %s in finger_trap_exit", err)
 
 
-async def finger_exit(*, position: TradePosition, positions: Positions, timeframe: TimeFrame, count: int, ema: int):
+async def finger_exit(*, pos: OpenPosition, timeframe: TimeFrame, count: int, ema: int):
     try:
-        symbol = Symbol(name=position.symbol)
+        if not await pos.update_position():
+            return
+        symbol = pos.symbol
+        position = pos.position
         candles = await symbol.copy_rates_from_pos(timeframe=timeframe, count=count)
         candles.ta.ema(length=ema, append=True)
         candles.rename(**{f"EMA_{ema}": "ema"})
@@ -47,6 +49,6 @@ async def finger_exit(*, position: TradePosition, positions: Positions, timefram
             if cae.iloc[-1]:
                 close = True
         if close:
-            await positions.close_position(position=position)
+            await pos.close_position()
     except Exception as err:
         logger.error("Error: %s in finger_exit", err)
