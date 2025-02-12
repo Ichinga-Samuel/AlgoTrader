@@ -1,6 +1,9 @@
 from logging import getLogger
 
-from aiomql import OrderType, Trader
+from aiomql import OrderType, Trader, TradePosition
+
+from ..data_structs import PositionTracker, OpenPosition
+from ..trackers import finger_exit, exit_at_profit, exit_at_point, atr_trailer
 
 logger = getLogger(__name__)
 
@@ -19,12 +22,12 @@ class SimpleTrader(Trader):
             osr = await self.send_order()
             if osr.retcode != 10009 or osr is None:
                 return
-            # set the exit parameters for the trade
-            self.config.state.setdefault("finger_trap_exit", {})[osr.order] = exit_params
-            # set the exit at profit parameter for the trade
-            self.config.state.setdefault("exit_at_profit", {})[osr.order] = parameters.get("exit_at_profit", 4)
-            # set the exit at point parameter for the trade
-            self.config.state.setdefault("exit_at_point", {})[osr.order] = parameters.get("exit_at_point", 100)
+            open_pos = OpenPosition(ticket=osr.order, symbol=self.symbol,
+                                    position=TradePosition(ticket=osr.order, symbol=self.symbol.name))
+            open_pos.add_tracker(tracker=PositionTracker(exit_at_point, points=50)) # 50 points
+            open_pos.add_tracker(tracker=PositionTracker(exit_at_profit))
+            open_pos.add_tracker(tracker=PositionTracker(finger_exit, **exit_params))
+            open_pos.add_tracker(tracker=PositionTracker(atr_trailer))
             self.parameters |= parameters
             await self.record_trade(result=osr, parameters=self.parameters.copy())
         except Exception as err:

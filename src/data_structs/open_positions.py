@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Callable, Union
+from typing import Union
 from logging import getLogger
 
 from aiomql import (Symbol, TradePosition, Order, TradeAction, OrderSendResult, OrderType, Positions, Config)
@@ -20,7 +20,7 @@ class OpenPosition:
     hedged_position: Union['OpenPosition', None] = None  # the hedge of the position
     position_hedged: Union['OpenPosition', None] = None  # the position that is hedged
     positions: Positions = field(default_factory=Positions)
-    config: Config = None
+    config: Config = field(default=Config)
     state_key: str = 'tracked_positions'
 
     def add_tracker(self, *, tracker: PositionTracker, number: int = None):

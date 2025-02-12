@@ -8,7 +8,7 @@ from ..data_structs import OpenPosition
 logger = getLogger(__name__)
 
 
-async def exit_at_point(*, pos: OpenPosition, points: int = 100):
+async def exit_at_point(pos: OpenPosition, *, points: int = 100):
     """Exit a position after a certain amount of points have been reached starting from the entry price.
     Point is the smallest price movement of a financial instrument. in the case of forex it is one tenth of a pip i.e
     one pip is 10 points.

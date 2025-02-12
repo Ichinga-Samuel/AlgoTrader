@@ -1,34 +1,13 @@
-import asyncio
 from logging import getLogger
 
-from aiomql import Config, Positions, Symbol, TimeFrame, TradePosition, OrderType
+from aiomql import  TimeFrame, OrderType
 
 from ..data_structs import OpenPosition
 
 logger = getLogger(__name__)
 
 
-async def finger_trap_exit(*, interval: int = 60):
-    while True:
-        try:
-            await asyncio.sleep(interval)
-            # a dictionary of ticket: {timeframe, count, ema}
-            tickets = config.state.get("finger_trap_exit", {})
-            if not tickets:
-                continue
-            positions = await pos.get_positions()
-            positions = [position for position in positions if position.ticket in tickets.keys()]
-            await asyncio.gather(*[finger_exit(position=position, positions=pos,
-                                               **tickets[position.ticket]) for position in positions])
-            positions = await pos.get_positions()
-            tickets = {ticket: params for ticket, params in tickets.items() if ticket in
-                       [position.ticket for position in positions]}
-            config.state["finger_trap_exit"] = tickets
-        except Exception as err:
-            logger.error("Error: %s in finger_trap_exit", err)
-
-
-async def finger_exit(*, pos: OpenPosition, timeframe: TimeFrame, count: int, ema: int):
+async def finger_exit(pos: OpenPosition, *, timeframe: TimeFrame, count: int, ema: int):
     try:
         if not await pos.update_position():
             return

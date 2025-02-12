@@ -18,7 +18,7 @@ class PositionTracker:
 
     async def __call__(self):
         try:
-            await self.function(**self.kwargs)
+            await self.function(self.open_position, **self.kwargs)
         except Exception as exe:
             logger.error("%s: Error occurred in %s for %s:%d", exe, self.function.__name__,
                          self.open_position.symbol.name, self.open_position.ticket)
@@ -27,4 +27,3 @@ class PositionTracker:
         self.open_position = open_position
         if number is not None:
             self.number = number
-        self.kwargs['pos'] = open_position
