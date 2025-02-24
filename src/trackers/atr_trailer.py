@@ -6,8 +6,8 @@ from ..data_structs import OpenPosition
 logger = getLogger(__name__)
 
 
-async def atr_trailer(pos: OpenPosition, *, timeframe: TimeFrame = TimeFrame.D1,
-                      period: int = 22, multiplier: float = 3, cc: int = 500):
+async def atr_trailer(pos: OpenPosition, *, timeframe: TimeFrame = TimeFrame.H1,
+                      period: int = 22, multiplier: float = 2, cc: int = 720):
     try:
         if not await pos.update_position():
             return
